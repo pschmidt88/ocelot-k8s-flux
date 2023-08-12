@@ -6,6 +6,8 @@ metadata:
     type: local
 spec:
   capacity:
-    storage: 100Mi
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
   hostPath:
     path: "/usr/k8s-volumes/postgres"
