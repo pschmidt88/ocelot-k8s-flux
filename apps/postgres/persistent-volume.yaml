@@ -10,4 +10,4 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/usr/k8s-volumes/postgres"
+    path: "/home/rookian/k8s-volumes/postgres"
