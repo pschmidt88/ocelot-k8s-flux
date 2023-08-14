@@ -23,3 +23,5 @@ spec:
   values:
     volumePermissions:
       enabled: true
+    auth:
+      existingSecret: postgres-secrets
