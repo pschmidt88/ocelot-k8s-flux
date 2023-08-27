@@ -1,7 +1,5 @@
 resources:
-  - namespace.yaml
   - bitnami-repository.yaml
   - helm-release.yaml
   - persistent-volume.yaml
   - postgres-secrets.yaml
-  - init-db-scripts.yaml

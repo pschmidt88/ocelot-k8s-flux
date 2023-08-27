@@ -17,7 +17,7 @@ spec:
     crds: Create
   interval: 1h0m0s
   releaseName: postgres
-  targetNamespace: postgres
+  targetNamespace: paperless
   upgrade:
     crds: CreateReplace
   values:
@@ -26,7 +26,6 @@ spec:
     volumePermissions:
       enabled: true
     auth:
+      username: paperless
+      database: paperless
       existingSecret: postgres-secrets
-    primary:
-      initdb:
-        scriptsSecret: init-db-scripts
