@@ -1,0 +1,15 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: init-db-scripts
+  namespace: postgres
+spec:
+  encryptedData:
+    init-paperless-db.sql: AgAwXvim3vKMcFgEWvA/mUliTAPZiaH6rqSSQdDR+fhxwjNvnOniv1oO6BW31haEIyEdGGhQX+DHYAghz/VH4XIeIzWWiHpRKaULwG0Uo5S4cL3vkIneNwViO+AK8ZkoCEvqt3gQwKTk+chmtKxsWcrOWivQr9OS8OMsnDJjkiSV5ihR2hObvjbfeeIA7pfZbZ1klImouFVmSDd7rKTU6JKU/yLgV82fbjLnxVAPwJFONiezIMf11RU7pfMNLTo+E8dBHnVKp1pVXEMoOMd6MEIA3/bB2wh8rkOdYU6EjOMtehmrxZLX+ZoivwO5rTMl6SNIP84pn8fJudpzMexa5I6MfbQEr26ZY8jpM535YiAwszRiE55DduH3lDFximi0zxKK3+rSwzHlz9icghgxPBaCLAIUTtSO04zPBL6K3sl52aseVQg2VBwav1IxVOIkml7mG5dkViVard4k2JcKDhD3JU96sxUEBYkcwMFyEB8w+x5esWJnYjmzk7mpwtMSvPCjYkDCkhtfA2677YRokQeytJ632l6JJ43wmx5rfBzRFL5qNFlcIiGApZiH4I5wzkNa9EINDQQic9YZF376zuHJYTDER6qWlmbMd0xwnhdggLt6Goh1H2PM/uAkTY8J+i+qlC7MQhH93b/MciWHS9RBZwRDt8D5TRSCJERXxHd4sCt1KMfNxCreGQd7Z5ZN6t6so/b25HDJVJ06Y2yFBpZ1U9PSkEgCv6ZXziRSwweV1a9GVx6R7Jv236dypF0qQIIOx6U5Y+50HM8oeUSTWivpP54v50tM/LeDShH9xCcbO8JRLoeNHVYvG9jQkdKfimI8zPtxab9wjpMZr9rELen5N/rAbKyxy2uoAiTQc/KKhHT0jUIez11jgKBo4nIWzi6/2HeHjHp1PA1C+x2CqNT1BPM8FHY+pLE3krG9
+  template:
+    metadata:
+      creationTimestamp: null
+      name: init-db-scripts
+      namespace: postgres
+

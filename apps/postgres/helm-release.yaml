@@ -25,3 +25,6 @@ spec:
       enabled: true
     auth:
       existingSecret: postgres-secrets
+    primary:
+      initdb:
+        scriptsSecret: init-db-scripts
