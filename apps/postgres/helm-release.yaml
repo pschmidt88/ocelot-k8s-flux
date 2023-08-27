@@ -21,6 +21,8 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    image:
+      debug: true
     volumePermissions:
       enabled: true
     auth:
