@@ -1,2 +1,3 @@
 resources:
+  - persistent-volumes.yaml
   - helm-release.yaml
