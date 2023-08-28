@@ -20,3 +20,6 @@ spec:
   targetNamespace: flux-system
   upgrade:
     crds: CreateReplace
+  values:
+    volumePermissions:
+      enabled: true
