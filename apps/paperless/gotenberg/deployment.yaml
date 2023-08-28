@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gotenberg
+  namespace: paperless
+  labels: &labels
+    app.kubernetes.io/component: paperless
+    app.kubernetes.io/name: gotenberg
+spec:
+  selector:
+    matchLabels: *labels
+  replicas: 1
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+      - name: gotenberg
+        image: docker.io/gotenberg/gotenberg:8.8
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1Gi
+        ports:
+        - containerPort: 3000
+          name: gotenberg
+      restartPolicy: Always
