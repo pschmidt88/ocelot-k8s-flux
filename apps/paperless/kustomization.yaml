@@ -1,5 +1,10 @@
 resources:
   - namespace.yaml
+  - secrets/postgres-secrets.yaml
   - gotenberg
   - tika
   - postgres
+  - data-pvc.yaml
+  - media-pvc.yaml
+  - deployment.yaml
+  - service.yaml

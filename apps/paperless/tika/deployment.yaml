@@ -4,8 +4,8 @@ metadata:
   name: tika
   namespace: paperless
   labels: &labels
-    app.kubernetes.io/component: paperless
-    app.kubernetes.io/name: tika
+    app.kubernetes.io/component: tika
+    app.kubernetes.io/name: paperless
 spec:
   selector:
     matchLabels: *labels

@@ -1,0 +1,16 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: paperless-ngx
+  namespace: paperless
+  labels: &labels
+    app.kubernetes.io/name: paperless
+    app.kubernetes.io/component: paperless-ngx
+spec:
+  selector: *labels
+  ports:
+  - name: web
+    protocol: TCP
+    port: 8000
+    targetPort: 8000

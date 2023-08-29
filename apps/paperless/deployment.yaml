@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless-ngx
+  namespace: paperless
+  labels: &labels
+    app.kubernetes.io/component: paperless-ngx
+    app.kubernetes.io/name: paperless
+spec:
+  selector:
+    matchLabels: *labels
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+      - name: paperless-ngx
+        image: ghcr.io/paperless-ngx/paperless-ngx:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 1000m
+            memory: 500Mi
+        env:
+        - name: PAPERLESS_REDIS
+          value: redis://redis-master.flux-system:6379
+        - name: PAPERLESS_DBHOST
+          value: postgres-postgresql
+        - name: PAPERLESS_TIKA_ENABLED
+          value: "1"
+        - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
+          value: http://gotenberg.paperless:3000
+        - name: PAPERLESS_TIKA_ENDPOINT
+          value: http://tika.paperless:9998
+            #- name: PAPERLESS_SECRET_KEY
+            #value: change-me
+        - name: PAPERLESS_DBPASS
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secrets
+              key: postgres-password 
+        ports:
+        - containerPort: 8000
+          name: web
+
+        volumeMounts:
+        - name: data 
+          mountPath: /usr/src/paperless/data
+        - name: media
+          mountPath: /usr/src/paperless/media
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: paperless-data-pvc
+        - name: media
+          persistentVolumeClaim:
+            claimName: paperless-media-pvc
+      restartPolicy: Always
+---
+
