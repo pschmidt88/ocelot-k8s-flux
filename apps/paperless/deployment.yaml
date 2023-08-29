@@ -28,7 +28,7 @@ spec:
         - name: PAPERLESS_REDIS
           value: redis://redis-master.flux-system:6379
         - name: PAPERLESS_DBHOST
-          value: postgres-postgresql
+          value: postgres-postgresql.paperless
         - name: PAPERLESS_TIKA_ENABLED
           value: "1"
         - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
@@ -41,7 +41,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: postgres-secrets
-              key: postgres-password 
+              key: password
         ports:
         - containerPort: 8000
           name: web
