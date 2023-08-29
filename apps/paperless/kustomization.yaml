@@ -4,7 +4,9 @@ resources:
   - gotenberg
   - tika
   - postgres
+  - rclone
   - data-pvc.yaml
   - media-pvc.yaml
+  - consume-pvc.yaml
   - deployment.yaml
   - service.yaml

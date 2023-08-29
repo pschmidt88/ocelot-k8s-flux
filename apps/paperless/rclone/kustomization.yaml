@@ -1,0 +1,3 @@
+resources:
+  - rclone-config.yaml
+  - cronjob.yaml
