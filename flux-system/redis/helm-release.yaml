@@ -21,6 +21,8 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    auth:
+      enabled: false
     replica:
       replicaCount: 1
     volumePermissions:
