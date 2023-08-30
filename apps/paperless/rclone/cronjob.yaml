@@ -19,8 +19,9 @@ spec:
               name: data
             - mountPath: /tmp/paperless/consume
               name: paperless-consume
-            - mountPath: /config/rclone
+            - mountPath: /config/rclone/rclone.conf
               name: rclone-config
+              subPath: rclone.conf
           restartPolicy: OnFailure
           volumes:
           - name: data
