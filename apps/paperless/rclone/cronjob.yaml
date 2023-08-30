@@ -10,25 +10,22 @@ spec:
     spec:
       template:
         spec:
+          securityContext:
+            runAsUser: 1000
           containers:
           - name: import-from-onedrive
             image: rclone/rclone:latest
             args: ['move', 'OneDrive:Dokumente/Office\ Lens', '/tmp/paperless/consume']
             volumeMounts:
-            - mountPath: /config/rclone
-              name: config-directory
             - mountPath: /data
               name: data
             - mountPath: /tmp/paperless/consume
               name: paperless-consume
-            - mountPath: /config/rclone/rclone.conf
+            - mountPath: /config/rclone
               name: rclone-config
-              subPath: rclone.conf
           restartPolicy: OnFailure
           volumes:
           - name: data
-            emptyDir: {}
-          - name: config-directory
             emptyDir: {}
           - name: rclone-config
             secret:
