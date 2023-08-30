@@ -15,6 +15,8 @@ spec:
             image: rclone/rclone:latest
             args: ['move', 'OneDrive:Dokumente/Office\ Lens', '/tmp/paperless/consume']
             volumeMounts:
+            - mountPath: /config/rclone
+              name: config-directory
             - mountPath: /data
               name: data
             - mountPath: /tmp/paperless/consume
@@ -25,6 +27,8 @@ spec:
           restartPolicy: OnFailure
           volumes:
           - name: data
+            emptyDir: {}
+          - name: config-directory
             emptyDir: {}
           - name: rclone-config
             secret:
