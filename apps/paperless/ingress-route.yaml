@@ -5,7 +5,7 @@ metadata:
   namespace: paperless
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
   - match: Host(`paperless.rookian.me`)
     kind: Rule
