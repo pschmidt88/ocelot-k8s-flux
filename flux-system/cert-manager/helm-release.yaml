@@ -20,4 +20,5 @@ spec:
     crds: CreateReplace
   install:
     crds: Create
-
+  values:
+    installCRDs: true
