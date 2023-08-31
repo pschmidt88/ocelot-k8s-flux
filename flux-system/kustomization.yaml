@@ -6,3 +6,4 @@ resources:
 - infrastructure
 - helm-repositories
 - redis
+- traefik
