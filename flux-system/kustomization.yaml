@@ -7,3 +7,4 @@ resources:
 - helm-repositories
 - redis
 - traefik
+- cert-manager
