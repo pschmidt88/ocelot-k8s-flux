@@ -1,6 +1,7 @@
 resources:
   - namespace.yaml
   - secrets/postgres-secrets.yaml
+  - secrets/paperless.yaml
   - gotenberg
   - tika
   - postgres

@@ -25,6 +25,8 @@ spec:
             cpu: 2
             memory: 4Gi
         env:
+        - name: PAPERLESS_URL
+          value: https://paperless.rookian.me
         - name: PAPERLESS_REDIS
           value: redis://redis-master.flux-system:6379
         - name: PAPERLESS_DBHOST
@@ -35,8 +37,11 @@ spec:
           value: http://gotenberg.paperless:3000
         - name: PAPERLESS_TIKA_ENDPOINT
           value: http://tika.paperless:9998
-            #- name: PAPERLESS_SECRET_KEY
-            #value: change-me
+        - name: PAPERLESS_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: paperless
+              key: secretKey
         - name: PAPERLESS_DBPASS
           valueFrom:
             secretKeyRef:
