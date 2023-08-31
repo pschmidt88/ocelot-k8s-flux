@@ -11,5 +11,5 @@ spec:
       name: staging-cluster-issuer-account-key
     solvers:
     - http01:
-      ingress:
-        class: traefik
+        ingress:
+          class: traefik
