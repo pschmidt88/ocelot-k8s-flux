@@ -21,8 +21,6 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
-    image:
-      tag: "3.0"
     service:
       type: NodePort
       externalIPs:
