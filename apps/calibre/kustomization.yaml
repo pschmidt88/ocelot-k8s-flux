@@ -1,9 +1,0 @@
-resources:
-  - namespace.yaml
-  - pv-config.yaml
-  - pv-books.yaml
-  - pvc-config.yaml
-  - pvc-books.yaml
-  - deployment.yaml
-  - service.yaml
-  - ingress.yaml
