@@ -1,2 +1,3 @@
-- helm-release.yaml
-- namespace.yaml
+resources:
+  - helm-release.yaml
+  - namespace.yaml
