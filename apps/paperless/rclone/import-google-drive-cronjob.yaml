@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: import-files-from-google-drive
+  namespace: paperless
+spec:
+  # every 5 minutes
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsUser: 1000
+          containers:
+            - name: import-from-google-drive
+              image: rclone/rclone:latest
+              args: ["move", "GoogleDrive:Scans", "/tmp/paperless/consume/"]
+              volumeMounts:
+                - mountPath: /data
+                  name: data
+                - mountPath: /tmp/paperless/consume
+                  name: paperless-consume
+                - mountPath: /config/rclone
+                  name: rclone-config
+          restartPolicy: OnFailure
+          volumes:
+            - name: data
+              emptyDir: {}
+            - name: rclone-config
+              secret:
+                secretName: rclone-config
+            - name: paperless-consume
+              persistentVolumeClaim:
+                claimName: paperless-consume-pvc
