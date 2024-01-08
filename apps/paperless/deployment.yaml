@@ -31,6 +31,8 @@ spec:
           value: redis://redis-master.flux-system:6379
         - name: PAPERLESS_DBHOST
           value: postgres-postgresql.paperless
+        - name: PAPERLESS_OCR_USER_ARGS
+          value: '{"continue_on_soft_render_error": true}'
         - name: PAPERLESS_TIKA_ENABLED
           value: "1"
         - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
