@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ghost-ingress
+  namespace: ghost
+  labels:
+    app: ghost
+    app.kubernetes.io/name: ghost
+    app.kubernetes.io/instance: ghost
+    app.kubernetes.io/version: "5.8"
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/part-of: ghost
+  annotations:
+    cert-manager.io/cluster-issuer: lets-encrypt
+spec:
+  tls:
+  - hosts:
+    - rookian.me
+    - www.rookian.me
+    secretName: tls-rookian-me
+  rules: 
+  - host: rookian.me
+    http: &http-rule
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: service-ghost
+            port:
+              name: ghost
+  - host: www.rookian.me
+    http: *http-rule

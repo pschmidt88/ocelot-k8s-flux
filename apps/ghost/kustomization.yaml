@@ -1,4 +1,9 @@
 resources:
   - namespace.yaml
-  - helm-release.yaml
-  - pv.yaml
+  - secrets/database.yaml
+  - secrets/ghost-config.yaml
+  - pvc.yaml
+  - services.yaml
+  - mysql.yaml
+  - deployment.yaml
+  - ingress.yaml
