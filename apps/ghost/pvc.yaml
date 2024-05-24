@@ -1,4 +1,48 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ghost-content
+  namespace: ghost
+  labels:
+    app: ghost
+    app.kubernetes.io/name: ghost
+    app.kubernetes.io/instance: ghost
+    app.kubernetes.io/version: "5.8"
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: ghost
+    type: local
+spec:
+  storageClassName: manual-ghost-content
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: "/home/rookian/k8s-volumes/ghost/content"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-ghost
+  namespace: ghost
+  labels:
+    app: ghost
+    app.kubernetes.io/name: ghost
+    app.kubernetes.io/instance: ghost
+    app.kubernetes.io/version: "5.8"
+    app.kubernetes.io/component: database-storage
+    app.kubernetes.io/part-of: ghost
+    type: local
+spec:
+  storageClassName: manual-ghost-database
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: "/home/rookian/k8s-volumes/ghost/database"
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: ghost-content
@@ -12,13 +56,11 @@ metadata:
     app.kubernetes.io/part-of: ghost
 spec:
   storageClassName: manual-ghost-content
-  hostPath:
-    path: "/home/rookian/k8s-volumes/ghost/content"
   accessModes:
   - ReadWriteMany 
   resources:
     requests:
-    storage: 2Gi
+      storage: 2Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -33,9 +75,7 @@ metadata:
     app.kubernetes.io/component: database-storage
     app.kubernetes.io/part-of: ghost
 spec:
-  storageClassName: manual-ghost-mysql
-  hostPath:
-    path: "/home/rookian/k8s-volumes/ghost/mysql"
+  storageClassName: manual-ghost-database
   accessModes:
   - ReadWriteMany
   resources:
