@@ -20,8 +20,8 @@ spec:
     metadata:
       labels:
         app: mysql-ghost
-      annotations:
-        container.apparmor.security.beta.kubernetes.io/mysql-ghost: runtime/default
+      # annotations:
+      #   container.apparmor.security.beta.kubernetes.io/mysql-ghost: runtime/default
     spec:
       initContainers:
       - name: mysql-ghost-init
@@ -120,9 +120,9 @@ spec:
       #               values:
       #                 - "true"
 
-      securityContext:
-        seccompProfile:
-          type: RuntimeDefault
+      # securityContext:
+      #   seccompProfile:
+      #     type: RuntimeDefault
 
       volumes:
       - name: mysql-ghost-volume
