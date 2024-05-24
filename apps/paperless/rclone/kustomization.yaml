@@ -1,4 +1,3 @@
 resources:
   - rclone-config.yaml
-  - import-onedrive-cronjob.yaml
   - import-google-drive-cronjob.yaml
