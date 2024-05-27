@@ -1,0 +1,19 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: hcloud-csi
+  namespace: hcloud
+spec:
+  chart:
+    spec:
+      chart: hcloud-csi
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: hcloud
+        namespace: flux-system
+      version: 2.7.0
+  interval: 1h0m0s
+  releaseName: hcloud-csi-driver
+  targetNamespace: hcloud
