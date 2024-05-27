@@ -2,3 +2,4 @@ resources:
   - bitnami-repository.yaml
   - traefik-repository.yaml
   - jetstack-repository.yaml
+  - hetzner-repository.yaml
