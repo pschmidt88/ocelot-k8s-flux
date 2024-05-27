@@ -81,3 +81,43 @@ spec:
   resources:
     requests:
       storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ghost-database-pvc
+  namespace: ghost
+  labels:
+    app: mysql-ghost
+    app.kubernetes.io/name: ghost-database-pvc
+    app.kubernetes.io/instance: ghost
+    app.kubernetes.io/version: "5.8"
+    app.kubernetes.io/component: database-storage
+    app.kubernetes.io/part-of: ghost
+spec:
+  storageClassName: hcloud-volumes
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ghost-content-pvc
+  namespace: ghost
+  labels:
+    app: ghost
+    app.kubernetes.io/name: ghost-content-pvc
+    app.kubernetes.io/instance: ghost
+    app.kubernetes.io/version: "5.8"
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: ghost
+spec:
+  storageClassName: hcloud-volumes
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
