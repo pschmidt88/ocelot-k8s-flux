@@ -127,7 +127,7 @@ spec:
       volumes:
       - name: mysql-ghost-volume
         persistentVolumeClaim:
-          claimName: mysql-ghost-pvc
+          claimName: ghost-database-pvc
       - name: mysql-ghost-tmp
         emptyDir:
           sizeLimit: 128Mi

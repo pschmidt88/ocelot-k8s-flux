@@ -26,7 +26,7 @@ spec:
       volumes:
       - name: ghost-content
         persistentVolumeClaim:
-          claimName: ghost-content
+          claimName: ghost-content-pvc
 
       - name: ghost-config-prod
         secret:
