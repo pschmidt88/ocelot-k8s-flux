@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: hcloud
         namespace: flux-system
-      version: 2.7.0
+      version: 2.6.0
   interval: 1h0m0s
   releaseName: hcloud-csi-driver
   targetNamespace: hcloud
