@@ -26,7 +26,7 @@ spec:
             memory: 4Gi
         env:
         - name: PAPERLESS_URL
-          value: https://paperless.rookian.me
+          value: https://paperless.rookian.dev
         - name: PAPERLESS_REDIS
           value: redis://redis-master.flux-system:6379
         - name: PAPERLESS_DBHOST
