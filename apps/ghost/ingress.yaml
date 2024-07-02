@@ -15,11 +15,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - rookian.me
-    - www.rookian.me
-    secretName: tls-rookian-me
+    - rookian.dev
+    - www.rookian.dev
+    secretName: tls-rookian-dev
   rules: 
-  - host: rookian.me
+  - host: rookian.dev
     http: &http-rule
       paths:
       - path: /
@@ -29,5 +29,5 @@ spec:
             name: service-ghost
             port:
               name: ghost
-  - host: www.rookian.me
+  - host: www.rookian.dev
     http: *http-rule
