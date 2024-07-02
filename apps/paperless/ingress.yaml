@@ -1,31 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: paperless-me
-  namespace: paperless
-  annotations:
-    cert-manager.io/cluster-issuer: lets-encrypt
-spec:
-  tls:
-  - hosts:
-    - paperless.rookian.me
-    secretName: tls-paperless-rookian-me
-  rules:
-  - host: paperless.rookian.me
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: paperless-ngx
-            port:
-              name: web
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: paperless-dev
+  name: paperless
   namespace: paperless
   annotations:
     cert-manager.io/cluster-issuer: lets-encrypt
