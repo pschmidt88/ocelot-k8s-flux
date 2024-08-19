@@ -1,0 +1,53 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: immich
+  namespace: immich
+spec:
+  chart:
+    spec:
+      chart: immich
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: immich
+      version: immich-0.7.1
+  install:
+    crds: Create
+  interval: 1h0m0s
+  releaseName: immich
+  targetNamespace: immich
+  upgrade:
+    crds: CreateReplace
+  values:
+    env:
+      DB_HOSTNAME: postgres.external-services
+      DB_USERNAME: immich
+      DB_DATABASE_NAME: immich
+    immich:
+      persistence:
+        library:
+          existingClaim: immich-data-pvc
+    postgresql:
+      global:
+        postgresql:
+          auth:
+            existingSecret: postgres-password
+    redis:
+      enabled: true
+    server:
+      ingress:
+        main:
+          enabled: true
+          annotations:
+            cert-manager.io/cluster-issuer: lets-encrypt
+          hosts:
+          - host: photos.rookian.dev
+            paths:
+            - path: "/"
+          tls:
+          - hosts:
+            - photos.rookian.dev
+            secretName: tls-photos-rookian.dev
+
