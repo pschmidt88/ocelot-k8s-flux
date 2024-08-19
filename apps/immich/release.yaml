@@ -39,6 +39,13 @@ spec:
     redis:
       enabled: true
     server:
+      probes:
+        liveness:
+          spec:
+            initialDelaySeconds: 120
+        readiness:
+          spec:
+            initialDelaySeconds: 120
       ingress:
         main:
           enabled: true
