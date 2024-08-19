@@ -3,3 +3,5 @@ resources:
   - traefik
   - cert-manager
   - hcloud
+  - postgres
+  - external-services-namespace.yaml
