@@ -1,6 +1,6 @@
 resources:
   - namespace.yaml
   - helm-repository.yaml
-  - postgres-password.yaml
+  - postgres-credentials.yaml
   - pvc.yaml
   - release.yaml
