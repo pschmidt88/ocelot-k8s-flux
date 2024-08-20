@@ -22,9 +22,22 @@ spec:
     crds: CreateReplace
   values:
     env:
+      DB_DATABASE_NAME:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-password
+            key: database
+      DB_USERNAME:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-password
+            key: username
+      DB_PASSWORD:
+        valueFrom:
+          secretKeyRef:
+            name: postgres-password
+            key: password
       DB_HOSTNAME: postgres.external-services
-      DB_USERNAME: immich
-      DB_DATABASE_NAME: immich
     image:
       tag: v1.112.1
     immich:
@@ -52,11 +65,16 @@ spec:
           annotations:
             cert-manager.io/cluster-issuer: lets-encrypt
           hosts:
-          - host: photos.rookian.dev
-            paths:
-            - path: "/"
+            - host: photos.rookian.dev
+              paths:
+                - path: "/"
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: immich-server
+                      port:
+                        name: http
           tls:
-          - hosts:
-            - photos.rookian.dev
-            secretName: tls-photos-rookian.dev
-
+            - hosts:
+                - photos.rookian.dev
+              secretName: tls-photos-rookian.dev
