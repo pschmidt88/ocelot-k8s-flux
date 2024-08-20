@@ -37,7 +37,7 @@ spec:
           secretKeyRef:
             name: postgres-password
             key: password
-      DB_HOSTNAME: postgres.external-services
+      DB_HOSTNAME: 10.0.0.3
     image:
       tag: v1.112.1
     immich:
