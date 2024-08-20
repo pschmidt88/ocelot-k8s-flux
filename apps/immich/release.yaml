@@ -68,12 +68,6 @@ spec:
             - host: photos.rookian.dev
               paths:
                 - path: "/"
-                  pathType: Prefix
-                  backend:
-                    service:
-                      name: immich-server
-                      port:
-                        name: http
           tls:
             - hosts:
                 - photos.rookian.dev
