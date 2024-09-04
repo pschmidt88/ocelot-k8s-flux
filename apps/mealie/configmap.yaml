@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: main-config
+  namespace: mealie
+data:
+  ALLOW_SIGNUP: false
+  PUID: 1000
+  PGID: 1000
+  TZ: Europe/Berlin
+  MAX_WORKERS: 1
+  WEB_CONCURRENCY: 1
+  BASE_URL: https://mealie.rookian.dev
+  DB_ENGINE: postgres
