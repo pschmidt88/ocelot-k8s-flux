@@ -9,11 +9,9 @@ metadata:
     app.kubernetes.io/instance: mealie
 spec:
   ports:
-    - port: 9000
+    - name: mealie-web
+      port: 80
       protocol: TCP
-      targetPort: web
-      name: mealie-web
+      targetPort: 9000
   selector:
     app: mealie
-
----
