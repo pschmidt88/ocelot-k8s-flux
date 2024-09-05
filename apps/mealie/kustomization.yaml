@@ -1,7 +1,7 @@
 resources:
   - namespace.yaml
   - pvc.yaml
-  # - configmap.yaml
+  - configmap.yaml
   - deployment.yaml
   - postgres-credentials.yaml
   - service.yaml
