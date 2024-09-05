@@ -28,6 +28,27 @@ spec:
             envFrom:
               - configMapRef:
                   name: main-config
+            env:
+              - name: POSTGRES_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-credentials
+                    key: username
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-credentials
+                    key: password
+              - name: POSTGRES_DB
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-credentials
+                    key: database
+              - name: POSTGRES_SERVER
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-credentials
+                    key: host
           ports:
             - containerPort: 9000
               name: web
