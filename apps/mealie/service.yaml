@@ -10,8 +10,8 @@ metadata:
 spec:
   ports:
     - name: mealie-web
-      port: 80
+      port: 9000
       protocol: TCP
-      targetPort: 9000
+      targetPort: web
   selector:
     app: mealie
