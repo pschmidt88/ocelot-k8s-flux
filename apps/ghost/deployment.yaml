@@ -102,7 +102,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /ghost/api/v4/admin/site/
-              port: ghk8s
+              port: ghost
               httpHeaders:
                 - name: X-Forwarded-Proto
                   value: https
@@ -117,7 +117,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /ghost/api/v4/admin/site/
-              port: ghk8s
+              port: ghost
               httpHeaders:
                 - name: X-Forwarded-Proto
                   value: https
