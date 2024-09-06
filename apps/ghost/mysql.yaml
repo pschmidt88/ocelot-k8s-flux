@@ -20,92 +20,89 @@ spec:
     metadata:
       labels:
         app: mysql-ghost
-      # annotations:
-      #   container.apparmor.security.beta.kubernetes.io/mysql-ghost: runtime/default
     spec:
       initContainers:
-      - name: mysql-ghost-init
-        securityContext:
-          allowPrivilegeEscalation: false
-          privileged: false
-          readOnlyRootFilesystem: true
-        image: docker.io/busybox:stable-musl
-        imagePullPolicy: IfNotPresent
-        command:
-        - /bin/sh
-        - -c
-        - |
-          set -e
-          echo 'Changing ownership of mysql mount directory to 999:999'
-          chown -Rfv 999:999 /mnt/mysql || echo 'Error changing ownership of mysql mount directory to 999:999' && true
-          echo 'Changing ownership of tmp mount directory to 999:999'
-          chown -Rfv 999:999 /mnt/tmp || echo 'Error changing ownership of tmp mount directory to 999:999' && true
-          echo 'Changing ownership of socket mount directory to 999:999'
-          chown -Rfv 999:999 /mnt/var/run/mysqld || echo 'Error changing ownership of socket mount directory to 999:999' && true
-          exit 0
-          
-          
-        volumeMounts:
-        - name: mysql-ghost-volume
-          mountPath: /mnt/mysql
-          subPath: mysql-empty-subdir
-          readOnly: false
+        - name: mysql-ghost-init
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+          image: docker.io/busybox:stable-musl
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo 'Changing ownership of mysql mount directory to 65534:65534'
+              chown -Rfv 65534:65534 /mnt/mysql || echo 'Error changing ownership of mysql mount directory to 65534:65534' && true
+              echo 'Changing ownership of tmp mount directory to 65534:65534'
+              chown -Rfv 65534:65534 /mnt/tmp || echo 'Error changing ownership of tmp mount directory to 65534:65534' && true
+              echo 'Changing ownership of socket mount directory to 65534:65534'
+              chown -Rfv 65534:65534 /mnt/var/run/mysqld || echo 'Error changing ownership of socket mount directory to 65534:65534' && true
+              exit 0
 
-        - name: mysql-ghost-tmp
-          mountPath: /mnt/tmp
-          readOnly: false
+          volumeMounts:
+            - name: mysql-ghost-volume
+              mountPath: /mnt/mysql
+              subPath: mysql-empty-subdir
+              readOnly: false
 
-        - name: mysql-ghost-socket
-          mountPath: /mnt/var/run/mysqld
-          readOnly: false
-        
-        # YOu can ajust the resources according to your needs
-        resources:
-          requests:
-            memory: 0Mi
-            cpu: 0m
-          limits:
-            memory: 1Gi
-            cpu: 900m
+            - name: mysql-ghost-tmp
+              mountPath: /mnt/tmp
+              readOnly: false
+
+            - name: mysql-ghost-socket
+              mountPath: /mnt/var/run/mysqld
+              readOnly: false
+
+          # YOu can ajust the resources according to your needs
+          resources:
+            requests:
+              memory: 0Mi
+              cpu: 0m
+            limits:
+              memory: 1Gi
+              cpu: 900m
 
       containers:
-      - name: mysql-ghost
-        securityContext:
-          allowPrivilegeEscalation: false
-          privileged: false
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 999
+        - name: mysql-ghost
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
 
-        image: docker.io/mysql:8.2
-        imagePullPolicy: IfNotPresent # You can change this value according to your needs
-        envFrom:
-        - secretRef:
-            name: mysql-ghost-config
-        resources:
-          requests:
-            memory: 500Mi # You can change this value according to your needs
-            cpu: 400m # You can change this value according to your needs
-          limits:
-            memory: 1Gi # You can change this value according to your needs
-            cpu: 900m # You can change this value according to your needs
-        ports:
-        - containerPort: 3306
-          protocol: TCP
-          name: mysql-ghost
-        volumeMounts:
-        - name: mysql-ghost-volume
-          mountPath: /var/lib/mysql
-          subPath: mysql-empty-subdir
-          readOnly: false
+          image: docker.io/mysql:8.4
+          imagePullPolicy: IfNotPresent # You can change this value according to your needs
+          envFrom:
+            - secretRef:
+                name: mysql-ghost-config
+          resources:
+            requests:
+              memory: 500Mi # You can change this value according to your needs
+              cpu: 400m # You can change this value according to your needs
+            limits:
+              memory: 1Gi # You can change this value according to your needs
+              cpu: 900m # You can change this value according to your needs
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+              name: mysql-ghost
+          volumeMounts:
+            - name: mysql-ghost-volume
+              mountPath: /var/lib/mysql
+              subPath: mysql-empty-subdir
+              readOnly: false
 
-        - name: mysql-ghost-tmp
-          mountPath: /tmp
-          readOnly: false
+            - name: mysql-ghost-tmp
+              mountPath: /tmp
+              readOnly: false
 
-        - name: mysql-ghost-socket
-          mountPath: /var/run/mysqld
-          readOnly: false
+            - name: mysql-ghost-socket
+              mountPath: /var/run/mysqld
+              readOnly: false
 
       automountServiceAccountToken: false
 
@@ -120,17 +117,17 @@ spec:
       #               values:
       #                 - "true"
 
-      # securityContext:
-      #   seccompProfile:
-      #     type: RuntimeDefault
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
 
       volumes:
-      - name: mysql-ghost-volume
-        persistentVolumeClaim:
-          claimName: ghost-database-pvc
-      - name: mysql-ghost-tmp
-        emptyDir:
-          sizeLimit: 128Mi
-      - name: mysql-ghost-socket
-        emptyDir:
-          sizeLimit: 128Mi
+        - name: mysql-ghost-volume
+          persistentVolumeClaim:
+            claimName: ghost-database-pvc
+        - name: mysql-ghost-tmp
+          emptyDir:
+            sizeLimit: 128Mi
+        - name: mysql-ghost-socket
+          emptyDir:
+            sizeLimit: 128Mi

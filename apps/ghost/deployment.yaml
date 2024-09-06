@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/version: "5.8"
     app.kubernetes.io/component: ghost
     app.kubernetes.io/part-of: ghost
-    
+
 spec:
   replicas: 1
   selector:
@@ -24,130 +24,135 @@ spec:
     spec:
       automountServiceAccountToken: false # Disable automounting of service account token
       volumes:
-      - name: ghost-content
-        persistentVolumeClaim:
-          claimName: ghost-content-pvc
+        - name: ghost-content
+          persistentVolumeClaim:
+            claimName: ghost-content-pvc
 
-      - name: ghost-config-prod
-        secret:
-          secretName: ghost-config-prod
-          defaultMode: 420
+        - name: ghost-config-prod
+          secret:
+            secretName: ghost-config-prod
+            defaultMode: 420
 
-      - name: tmp
-        emptyDir:
-          sizeLimit: 64Mi
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi
 
       initContainers:
-      - name: ghost-init
-        image: docker.io/busybox:stable-musl
-        env:
-        - name: GHOST_INSTALL
-          value: /var/lib/ghost
-        - name: GHOST_CONTENT
-          value: /var/lib/ghost/content
-        - name: NODE_ENV
-          value: production
-        securityContext:
-          readOnlyRootFilesystem: true
-          allowPrivilegeEscalation: false
-        resources:
-          limits:
-            cpu: 900m
-            memory: 1000Mi
-          requests:
-            cpu: 100m
-            memory: 128Mi
-        command:
-          - /bin/sh
-          - '-c'
-          - |
-            set -e
+        - name: permission-fix
+          image: docker.io/busybox:stable-musl
+          env:
+            - name: GHOST_INSTALL
+              value: /home/nonroot/app/ghost
+            - name: GHOST_CONTENT
+              value: /home/nonroot/app/ghost/content
+            - name: NODE_ENV
+              value: production
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          resources:
+            limits:
+              cpu: 900m
+              memory: 1000Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          command:
+            - /bin/sh
+            - "-c"
+            - |
+              set -e
 
-            # Check if the following directories exists under $GHOST_CONTENT directory, if not, create them and then change the ownership to 1000:1000
-            export DIRS="files logs apps themes data public settings images media"
-            for dir in $DIRS; do
-              if [ ! -d $GHOST_CONTENT/$dir ]; then
-                echo "Creating $GHOST_CONTENT/$dir directory"
-                mkdir -pv $GHOST_CONTENT/$dir && chown -Rf 1000:1000 $GHOST_CONTENT/$dir || echo "Error creating $GHOST_CONTENT/$dir directory" && true
-              fi
-            done
+              export DIRS='files logs apps themes data public settings images media'
+              echo 'Check if base dirs exists, if not, create them'
+              echo "Directories to check: $DIRS"
+              for dir in $DIRS; do
+                if [ ! -d $GHOST_CONTENT/$dir ]; then
+                  echo "Creating $GHOST_CONTENT/$dir directory"
+                  mkdir -pv $GHOST_CONTENT/$dir && chown -Rfv 65532:65532 $GHOST_CONTENT/$dir || echo "Error creating $GHOST_CONTENT/$dir directory"
+                fi
+              done
 
+              echo "Changing ownership of $GHOST_CONTENT/themes directory"
+              chown -Rf 65532:65532 $GHOST_CONTENT/themes && echo "chown ok on thenmes" || echo "Error changing ownership of $GHOST_CONTENT/themes directory"
 
-            echo 'Delete and clean $GHOST_CONTENT/public directory and recreate it'
-            rm -rfv $GHOST_CONTENT/public && mkdir -pv $GHOST_CONTENT/public || echo 'Error deleting and cleaning $GHOST_CONTENT/public directory and recreating it' && true
+              echo "Changing ownership of $GHOST_CONTENT/public directory"
+              chown -Rf 65532:65532 $GHOST_CONTENT/public && chown ok in public|| echo "Error changing ownership of $GHOST_CONTENT public directory"
+              exit 0
 
-            echo 'Check if the directory $GHOST_CONTENT/themes ownership is different from UID 1000 and GID 1000, if so, change it to 1000:1000 recursively and verbose.'
-            if [ "$(stat -c '%u:%g' $GHOST_CONTENT/themes)" != "1000:1000" ]; then
-              echo 'Changing ownership of $GHOST_CONTENT/themes directory to 1000:1000'
-              chown -Rf 1000:1000 $GHOST_CONTENT/themes || echo 'Error changing ownership of $GHOST_CONTENT/themes directory to 1000:1000' && true
-            fi
-
-            echo 'Check if the directory $GHOST_CONTENT/public ownership is different from UID 1000 and GID 1000, if so, change it to 1000:1000 recursively and verbose.'
-            if [ "$(stat -c '%u:%g' $GHOST_CONTENT/public)" != "1000:1000" ]; then
-              echo 'Changing ownership of $GHOST_CONTENT/public directory to 1000:1000'
-              chown -Rf 1000:1000 $GHOST_CONTENT/public || echo 'Error changing ownership of $GHOST_CONTENT/public directory to 1000:1000' && true
-            fi
-
-        volumeMounts:
-        - name: ghost-content
-          mountPath: /var/lib/ghost/content
-          readOnly: false
+          volumeMounts:
+            - name: ghost-content
+              mountPath: /var/lib/ghost/content
+              readOnly: false
 
       containers:
-      - name: ghost
-        image: ghcr.io/sredevopsorg/ghost-on-kubernetes:main
-        imagePullPolicy: Always
-        ports:
         - name: ghost
-          containerPort: 2368
-          protocol: TCP
+          image: ghcr.io/sredevopsorg/ghost-on-kubernetes:main
+          imagePullPolicy: Always
+          ports:
+            - name: ghost
+              containerPort: 2368
+              protocol: TCP
 
-        # You should uncomment the following lines in production. Change the values according to your environment.
+          # You should uncomment the following lines in production. Change the values according to your environment.
 
-        # livenessProbe:
-        #   httpGet:
-        #     path: /ghost/api/v4/admin/site/
-        #     port: ghk8s
-        #     httpHeaders:
-        #     - name: X-Forwarded-Proto
-        #       value: https
-        #     - name: Host
-        #       value: tests.yourdomain.com
-        #   periodSeconds: 3600
-        #   timeoutSeconds: 3
-        #   successThreshold: 1
-        #   failureThreshold: 1
-        #   initialDelaySeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /ghost/api/v4/admin/site/
+              port: ghk8s
+              httpHeaders:
+                - name: X-Forwarded-Proto
+                  value: https
+                - name: Host
+                  value: rookian.dev
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+            initialDelaySeconds: 10
 
-        env:
-        - name: NODE_ENV
-          value: production
-        - name: TZ
-          value: America/Santiago
-        resources:
-          limits:
-            cpu: 800m
-            memory: 800Mi
-          requests:
-            cpu: 100m
-            memory: 200Mi
+          livenessProbe:
+            httpGet:
+              path: /ghost/api/v4/admin/site/
+              port: ghk8s
+              httpHeaders:
+                - name: X-Forwarded-Proto
+                  value: https
+                - name: Host
+                  value: rookian.dev
+            periodSeconds: 3600
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 1
+            initialDelaySeconds: 60
 
-        volumeMounts:
-        - name: ghost-content
-          mountPath: /var/lib/ghost/content
-          readOnly: false
-        - name: ghost-config-prod
-          readOnly: true
-          mountPath: /var/lib/ghost/config.production.json
-          subPath: config.production.json
-        - name: tmp # This is the temporary volume mount to allow loading themes
-          mountPath: /tmp
-          readOnly: false
-        securityContext:
-          readOnlyRootFilesystem: true
-          allowPrivilegeEscalation: false
-          runAsNonRoot: true
-          runAsUser: 1000
+          env:
+            - name: NODE_ENV
+              value: production
+          resources:
+            limits:
+              cpu: 800m
+              memory: 800Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
+
+          volumeMounts:
+            - name: ghost-content
+              mountPath: /home/nonroot/app/ghost/content
+              readOnly: false
+            - name: ghost-config-prod
+              readOnly: true
+              mountPath: /home/nonroot/app/ghost/config.production.json
+              subPath: config.production.json
+            - name: tmp # This is the temporary volume mount to allow loading themes
+              mountPath: /tmp
+              readOnly: false
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 65532
 
       restartPolicy: Always
       terminationGracePeriodSeconds: 15
@@ -162,7 +167,6 @@ spec:
       #               operator: In
       #               values:
       #                 - "true"
-
 
       securityContext: {}
       schedulerName: default-scheduler
