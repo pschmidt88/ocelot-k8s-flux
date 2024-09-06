@@ -87,7 +87,7 @@ spec:
 
       containers:
         - name: debug
-          image: busybox
+          image: docker.io/busybox:stable-musl
           volumeMounts:
             - name: ghost-content
               mountPath: /home/nonroot/app/ghost/content
