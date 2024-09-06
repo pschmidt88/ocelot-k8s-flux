@@ -86,6 +86,25 @@ spec:
               readOnly: false
 
       containers:
+        - name: debug
+          image: busybox
+          volumeMounts:
+            - name: ghost-content
+              mountPath: /home/nonroot/app/ghost/content
+              readOnly: false
+            - name: ghost-config-prod
+              readOnly: true
+              mountPath: /home/nonroot/app/ghost/config.production.json
+              subPath: config.production.json
+            - name: tmp # This is the temporary volume mount to allow loading themes
+              mountPath: /tmp
+              readOnly: false
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 65532
+
         - name: ghost
           image: ghcr.io/sredevopsorg/ghost-on-kubernetes:main
           imagePullPolicy: Always
