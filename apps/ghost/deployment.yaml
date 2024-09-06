@@ -73,6 +73,9 @@ spec:
                 fi
               done
 
+              echo "Changing ownershop of $GHOST_CONTENT"
+              chown -Rf 65532:65532 $GHOST_CONTENT && echo "chown ghost content ok" || echo "Error changing ownership of $GHOST_CONTENT directory"
+
               echo "Changing ownership of $GHOST_CONTENT/themes directory"
               chown -Rf 65532:65532 $GHOST_CONTENT/themes && echo "chown ok on thenmes" || echo "Error changing ownership of $GHOST_CONTENT/themes directory"
 
@@ -86,25 +89,6 @@ spec:
               readOnly: false
 
       containers:
-        - name: debug
-          image: docker.io/busybox:stable-musl
-          volumeMounts:
-            - name: ghost-content
-              mountPath: /home/nonroot/app/ghost/content
-              readOnly: false
-            - name: ghost-config-prod
-              readOnly: true
-              mountPath: /home/nonroot/app/ghost/config.production.json
-              subPath: config.production.json
-            - name: tmp # This is the temporary volume mount to allow loading themes
-              mountPath: /tmp
-              readOnly: false
-          securityContext:
-            readOnlyRootFilesystem: true
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            runAsUser: 65532
-
         - name: ghost
           image: ghcr.io/sredevopsorg/ghost-on-kubernetes:main
           imagePullPolicy: Always
