@@ -1,0 +1,5 @@
+resources:
+  - namsepace.yaml
+  - helm-repository.yaml
+  - postgres-credentials.yaml
+  - release.yaml

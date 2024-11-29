@@ -3,3 +3,4 @@ resources:
   - ghost
   - immich
   - mealie
+  - authentik

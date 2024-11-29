@@ -1,0 +1,59 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: authentik
+  namespace: authentik
+spec:
+  chart:
+    spec:
+      chart: authentik
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: goauthentik
+      version: 2024.10.4
+  install:
+    crds: Create
+  interval: 1h0m0s
+  releaseName: authentik
+  targetNamespace: authentik
+  upgrade:
+    crds: CreateReplace
+  values:
+    authentik:
+      postgresql:
+        host: 10.0.0.3
+        name: file://postgres-creds/database
+        user: file:///postgres-creds/username
+        password: file:///postgres-creds/password
+    redis:
+      enabled: true
+    server:
+      ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: lets-encrypt
+        hosts:
+          - sso.rookian.dev
+        tls:
+          - hosts:
+              - sso.rookian.dev
+            secretName: tls-sso-rookian-dev
+      volumes:
+        - name: postgres-creds
+          secret:
+            secretName: postgres-credentials
+      volumeMounts:
+        - name: postgres-creds
+          mountPath: /postgres-creds
+          readOnly: true
+    worker:
+      volumes:
+        - name: postgres-creds
+          secret:
+            secretName: postgres-credentials
+      volumeMounts:
+        - name: postgres-creds
+          mountPath: /postgres-creds
+          readOnly: true
