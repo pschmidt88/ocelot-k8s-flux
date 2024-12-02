@@ -27,6 +27,7 @@ spec:
         name: file://postgres-creds/database
         user: file:///postgres-creds/username
         password: file:///postgres-creds/password
+      secret_key: file:///application-secrets/key
     redis:
       enabled: true
     server:
@@ -41,6 +42,9 @@ spec:
               - sso.rookian.dev
             secretName: tls-sso-rookian-dev
       volumes:
+        - name: secrets
+          secret:
+            secretName: authentik-secrets
         - name: postgres-creds
           secret:
             secretName: postgres-credentials
@@ -48,12 +52,21 @@ spec:
         - name: postgres-creds
           mountPath: /postgres-creds
           readOnly: true
+        - name: secrets
+          mountPath: /application-secrets
+          readOnly: true
     worker:
       volumes:
+        - name: secrets
+          secret:
+            secretName: authentik-secrets
         - name: postgres-creds
           secret:
             secretName: postgres-credentials
       volumeMounts:
         - name: postgres-creds
           mountPath: /postgres-creds
+          readOnly: true
+        - name: secrets
+          mountPath: /application-secrets
           readOnly: true
