@@ -24,7 +24,7 @@ spec:
     authentik:
       postgresql:
         host: 10.0.0.3
-        name: file://postgres-creds/database
+        name: file:///postgres-creds/database
         user: file:///postgres-creds/username
         password: file:///postgres-creds/password
       secret_key: file:///application-secrets/key
