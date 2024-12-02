@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: immich
-      version: 0.7.1
+      version: 0.8.4
   install:
     crds: Create
   interval: 1h0m0s
@@ -39,7 +39,7 @@ spec:
             key: password
       DB_HOSTNAME: 10.0.0.3
     image:
-      tag: v1.112.1
+      tag: v1.121.0
     immich:
       persistence:
         library:
