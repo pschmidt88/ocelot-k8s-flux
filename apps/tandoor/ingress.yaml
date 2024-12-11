@@ -1,0 +1,38 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tandoor
+  namespace: tandoor
+  annotations:
+    cert-manager.io/cluster-issuer: lets-encrypt
+spec:
+  tls:
+  - hosts:
+    - recipes.rookian.dev
+    secretName: tls-recipes-rookian-dev
+  rules:
+  - host: recipes.rookian.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: tandoor
+            port:
+              name: gunicorn
+      - path: /media
+        pathType: Prefix
+        backend:
+          service:
+            name: tandoor
+            port: 
+              name: http
+      - path: /static
+        pathType: Prefix
+        backend:
+          service:
+            name: tandoor
+            port: 
+              name: http

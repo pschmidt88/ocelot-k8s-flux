@@ -1,0 +1,8 @@
+resources:
+  - namespace.yaml
+  - nginx-config.yaml
+  - secrets.yaml
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
