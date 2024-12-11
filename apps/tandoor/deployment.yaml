@@ -5,8 +5,8 @@ metadata:
   name: tandoor
   namespace: tandoor
   labels: &labels
-    app.kubernetes.io/metadata.name: tandoor
-    app.kubernetes.io/metadata.component: frontend
+    app.kubernetes.io/name: tandoor
+    app.kubernetes.io/component: frontend
 spec:
   replicas: 1
   strategy:
@@ -83,9 +83,6 @@ spec:
           - containerPort: 80
             protocol: TCP
             name: http
-          - containerPort: 8080
-            protocol: TCP
-            name: gunicorn
         resources:
           requests:
             cpu: 250m
@@ -117,6 +114,10 @@ spec:
           - --log-level
           - INFO
           - recipes.wsgi
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+            name: gunicorn
         livenessProbe:
           failureThreshold: 3
           httpGet:
