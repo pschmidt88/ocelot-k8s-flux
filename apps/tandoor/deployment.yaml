@@ -5,8 +5,8 @@ metadata:
   name: tandoor
   namespace: tandoor
   labels: &labels
-    kubernetes.io/metadata.name: tandoor
-    kubernetes.io/metadata.component: frontend
+    app.kubernetes.io/metadata.name: tandoor
+    app.kubernetes.io/metadata.component: frontend
 spec:
   replicas: 1
   strategy:
