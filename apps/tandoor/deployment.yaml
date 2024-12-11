@@ -171,6 +171,11 @@ spec:
               secretKeyRef:
                 name: tandoor
                 key: postgresql-password
+          - name: FDC_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: tandoor
+                key: fdc-api-key
         securityContext:
           runAsUser: 65534
       volumes:
