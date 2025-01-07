@@ -1,0 +1,56 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audiobookshelf
+  namespace: abs
+  labels: &labels
+    app.kubernetes.io/component: audiobookshelf
+    app.kubernetes.io/name: audiobookshelf
+spec:
+  selector:
+    matchLabels: *labels
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+        - name: audiobookshelf
+          image: ghcr.io/advplyr/audiobookshelf:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 300Mi
+          env:
+            - name: TZ
+              value: Europe/Berlin
+          ports:
+            - containerPort: 80
+              name: audiobookshelf
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: metadata
+              mountPath: /metadata
+            - name: data
+              mountPath: /ebooks
+              subPath: ebooks
+            - name: data
+              mountPath: /audiobooks
+              subPath: audiobooks
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/rookian/k8s-volumes/audiobookshelf/config
+        - name: metadata
+          hostPath:
+            path: /home/rookian/k8s-volumes/audiobookshelf/metadata
+        - name: data
+          hostPath:
+            path: /home/rookian/k8s-volumes/audiobookshelf/data
+      restartPolicy: Always
+---

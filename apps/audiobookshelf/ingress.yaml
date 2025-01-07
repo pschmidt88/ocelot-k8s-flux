@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: audiobookshelf
+  namespace: abs
+  labels:
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/name: audiobookshelf
+  annotations:
+    cert-manager.io/cluster-issuer: lets-encrypt
+spec:
+  tls:
+    - hosts:
+        - abs.rookian.dev
+      secretName: tls-abs-rookian-dev
+  rules:
+    - host: abs.rookian.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: audiobookshelf
+                port:
+                  name: http
