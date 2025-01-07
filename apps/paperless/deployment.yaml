@@ -14,52 +14,59 @@ spec:
       labels: *labels
     spec:
       containers:
-      - name: paperless-ngx
-        image: ghcr.io/paperless-ngx/paperless-ngx:latest
-        imagePullPolicy: IfNotPresent
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-          limits:
-            cpu: 2
-            memory: 4Gi
-        env:
-        - name: PAPERLESS_URL
-          value: https://paperless.rookian.dev
-        - name: PAPERLESS_REDIS
-          value: redis://redis-master.flux-system:6379
-        - name: PAPERLESS_DBHOST
-          value: postgres-postgresql.paperless
-        - name: PAPERLESS_OCR_USER_ARGS
-          value: '{"continue_on_soft_render_error": true}'
-        - name: PAPERLESS_TIKA_ENABLED
-          value: "1"
-        - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
-          value: http://gotenberg.paperless:3000
-        - name: PAPERLESS_TIKA_ENDPOINT
-          value: http://tika.paperless:9998
-        - name: PAPERLESS_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: paperless
-              key: secretKey
-        - name: PAPERLESS_DBPASS
-          valueFrom:
-            secretKeyRef:
-              name: postgres-secrets
-              key: password
-        ports:
-        - containerPort: 8000
-          name: web
+        - name: paperless-ngx
+          image: ghcr.io/paperless-ngx/paperless-ngx:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 2
+              memory: 4Gi
+          env:
+            - name: PAPERLESS_URL
+              value: https://paperless.rookian.dev
+            - name: PAPERLESS_REDIS
+              value: redis://redis-master.flux-system:6379
+            - name: PAPERLESS_DBHOST
+              value: postgres-postgresql.paperless
+            - name: PAPERLESS_OCR_USER_ARGS
+              value: '{"continue_on_soft_render_error": true}'
+            - name: PAPERLESS_TIKA_ENABLED
+              value: "1"
+            - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
+              value: http://gotenberg.paperless:3000
+            - name: PAPERLESS_TIKA_ENDPOINT
+              value: http://tika.paperless:9998
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: paperless
+                  key: secretKey
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: password
+            - name: PAPERLESS_APPS
+              value: "allauth.socialaccount.providers.openid_connect"
+            - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+              valueFrom:
+                secretKeyRef:
+                  name: paperless
+                  key: ssoConfig
+          ports:
+            - containerPort: 8000
+              name: web
 
-        volumeMounts:
-        - name: data 
-          mountPath: /usr/src/paperless/data
-        - name: media
-          mountPath: /usr/src/paperless/media
-        - name: consume
-          mountPath: /usr/src/paperless/consume
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+            - name: media
+              mountPath: /usr/src/paperless/media
+            - name: consume
+              mountPath: /usr/src/paperless/consume
       volumes:
         - name: data
           persistentVolumeClaim:
