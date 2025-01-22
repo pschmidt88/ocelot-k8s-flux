@@ -73,6 +73,8 @@ spec:
               mountPath: /usr/src/paperless/media
             - name: consume
               mountPath: /usr/src/paperless/consume
+            - name: export
+              mountPath: /usr/src/paperless/export
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -83,4 +85,7 @@ spec:
         - name: consume
           persistentVolumeClaim:
             claimName: paperless-consume-pvc
+        - name: export
+          persistentVolumeClaim:
+            claimName: paperless-export-pvc
       restartPolicy: Always
